@@ -1,0 +1,93 @@
+{
+  "name": "InvestIA - MVP Educacional",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "investia",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "c319ccd5-e419-4dcc-98cb-62bf0d7b67ca",
+      "name": "Receber solicitação",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "8b1e7a6c-5d4f-3a2b-9c0d-1e2f3a4b5c6d"
+    },
+    {
+      "parameters": {
+        "jsCode": "const entrada = $json.body ?? $json;\nconst ativo = String(entrada.ativo ?? 'exemplo de investimento').trim();\nconst pergunta = String(entrada.pergunta ?? 'Explique este assunto para um iniciante.').trim();\n\nif (!ativo || !pergunta) {\n  return [{ json: { ok: false, erro: 'Informe os campos ativo e pergunta.' } }];\n}\n\nreturn [{\n  json: {\n    ok: true,\n    projeto: 'InvestIA',\n    modo: 'demonstracao_educacional',\n    ativo,\n    pergunta,\n    dados: {\n      origem: 'dados ficticios de demonstracao',\n      valor_exemplo_brl: 100,\n      variacao_percentual_exemplo: 2.5\n    },\n    mensagem: `Recebi sua solicitação sobre ${ativo}. Este MVP ainda usa números fictícios para demonstrar o fluxo. A variação de exemplo é 2,5% sobre um valor ilustrativo de R$ 100. Isso não representa cotação real nem recomendação de investimento. Pergunta recebida: ${pergunta}`,\n    aviso: 'Projeto educacional. Os dados são fictícios; não use esta resposta para tomar decisões financeiras.'\n  }\n}];"
+      },
+      "id": "ad4d0522-da44-4876-a532-5e70b1769d2c",
+      "name": "Preparar resposta de exemplo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "6ce45936-43e9-46b0-a0b1-e3a832dff255",
+      "name": "Responder ao solicitante",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receber solicitação": {
+      "main": [
+        [
+          {
+            "node": "Preparar resposta de exemplo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar resposta de exemplo": {
+      "main": [
+        [
+          {
+            "node": "Responder ao solicitante",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "America/Sao_Paulo",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "c9620e93-81d3-4ba9-8831-da9ad4dc2fe2",
+  "meta": {
+    "instanceId": "24fea61a0f9ba7305c77f9874a4f80752950d301989885369e6ff33d78359d3d"
+  },
+  "nodeGroups": [],
+  "id": "EirD1yUfyTqYtCy0",
+  "tags": []
+}
